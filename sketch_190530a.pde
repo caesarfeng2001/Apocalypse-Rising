@@ -2,6 +2,8 @@ float S = 8;
 
 int x = 12;
 
+String stage = "MENU";
+
 int y = 8;
 
 String characters[] = new String[4];
@@ -9,6 +11,16 @@ String characters[] = new String[4];
 int[][] map = new int[x][y];
 
 int Zombies[] = new int[10];
+
+
+void Menu() {
+  fill(0);
+  rect(0, 0, 1200, 800);
+
+  fill(255);
+  rect(600, 400, 100, 40);
+}
+
 
 
 class Shooter {
@@ -87,7 +99,7 @@ class Shoot {
   void process() {
     this.x += this.sx;
     this.y += this.sy;
-    stroke(230,44,44);
+    stroke(230, 44, 44);
     line(this.x, this.y, this.x + this.sx, this.y + this.sy);
   }
 }
@@ -97,18 +109,16 @@ ArrayList<Shoot> bullets = new ArrayList<Shoot>();
 
 class Zombies {
   int x, y, sx, sy, size;
-  
-  Zombies(int a, int b, int s){
+
+  Zombies(int a, int b, int s) {
     this.x = a;
     this.y = b;
-    
+
     this.sx = s;
     this.sy = s;
-    
+
     this.size = 30;
-    
   }
-  
 }
 
 
@@ -120,24 +130,25 @@ void setup() {
 
 
 void draw() {
-  noStroke();
-  fill(0);
-  rect(0, 0, 1200, 800 );
-  
-  stroke(255);
-  for (int i = 0; i < x; i++) {
-    for (int j = 0; j < y; j++) {
-      rect(i * 100, j * 100, 100, 100);
+  if (stage == "GAME") {
+    noStroke();
+    fill(0);
+    rect(0, 0, 1200, 800 );
+
+    stroke(255);
+    for (int i = 0; i < x; i++) {
+      for (int j = 0; j < y; j++) {
+        rect(i * 100, j * 100, 100, 100);
+      }
     }
-  }
-  
 
 
-  // movement for shooter below
-  shooter.render();
-  shooter.move();
-   if (keyPressed){
-     if (key == 'd' || key == 'D') {
+
+    // movement for shooter below
+    shooter.render();
+    shooter.move();
+    if (keyPressed) {
+      if (key == 'd' || key == 'D') {
         shooter.moveRight();
       } 
       if (key == 'a' || key == 'A') {
@@ -149,41 +160,47 @@ void draw() {
       if (key == 's' || key == 'S') {
         shooter.moveDown();
       }
-   }
+    }
 
 
-  for (int i = 0; i < bullets.size(); i++) bullets.get(i).process(); // draw the bullets
+    for (int i = 0; i < bullets.size(); i++) bullets.get(i).process(); // draw the bullets
 
-// remove bullets once they hit the edge of the screen
-  for (int i = 0; i < bullets.size(); i++) {
-    if (bullets.get(i).x < 0 || bullets.get(i).x > 1500 ||bullets.get(i).y < 0 || bullets.get(i).y > 1000) {
-      bullets.remove(i);
-      i--;
+    // remove bullets once they hit the edge of the screen
+    for (int i = 0; i < bullets.size(); i++) {
+      if (bullets.get(i).x < 0 || bullets.get(i).x > 1500 ||bullets.get(i).y < 0 || bullets.get(i).y > 1000) {
+        bullets.remove(i);
+        i--;
+      }
     }
   }
+  if (stage == "MENU") Menu();
 }
 
 
 /*
 void keyPressed(){
-  
-    if (key == 'd' || key == 'D') {
-      shooter.moveRight();
-    } 
-    if (key == 'a' || key == 'A') {
-      shooter.moveLeft();
-    } 
-    if (key == 'w' || key == 'W') {
-      shooter.moveUp();
-    } 
-    if (key == 's' || key == 'S') {
-      shooter.moveDown();
-    }
-  }
+ 
+ if (key == 'd' || key == 'D') {
+ shooter.moveRight();
+ } 
+ if (key == 'a' || key == 'A') {
+ shooter.moveLeft();
+ } 
+ if (key == 'w' || key == 'W') {
+ shooter.moveUp();
+ } 
+ if (key == 's' || key == 'S') {
+ shooter.moveDown();
+ }
+ }
+ }
+ void keyReleased(){
+ 
+ 
+ }
+ */
+
+void mousePressed() {
+  if (mouseX > 600 && mouseX < 700 && mouseY > 400 && mouseY < 440 && stage == "MENU") stage = "GAME";
 }
 
-void keyReleased(){
-  
-  
-}
-*/
