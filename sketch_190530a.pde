@@ -1,26 +1,20 @@
 float S = 8;
 
-int x = 12;
+int mapWidth = 24;
+int mapHeight = 16;
 
 String stage = "MENU";
-
-int y = 8;
-
 String characters[] = new String[4];
 
-int[][] map = new int[x][y];
-
+int[][] map = new int[mapWidth][mapHeight];
 int Zombies[] = new int[10];
 
-
-void Menu() {
-  fill(0);
-  rect(0, 0, 1200, 800);
-
-  fill(255);
-  rect(600, 400, 100, 40);
-}
-
+int bw = 150;
+int bh = 50;
+int b1x = 525;
+int b1y = 375;
+int b2x = 525;
+int b2y = 650;
 
 
 class Shooter {
@@ -74,10 +68,12 @@ class Shooter {
         bullets.add(new Shoot(this.x, this.y, mouseX, mouseY));
       }
     }
+    
   }
 }
 
-Shooter shooter = new Shooter(100, 100, 3);
+
+
 
 class Shoot {
   float x, y, sx, sy;
@@ -104,23 +100,43 @@ class Shoot {
   }
 }
 
-ArrayList<Shoot> bullets = new ArrayList<Shoot>();
 
 
-class Zombies {
-  int x, y, sx, sy, size;
 
-  Zombies(int a, int b, int s) {
+class Zombie {
+  int x, y, tx, ty, size;
+
+  Zombie(int a, int b, int c, int d) {
     this.x = a;
     this.y = b;
 
-    this.sx = s;
-    this.sy = s;
+    this.tx = c;
+    this.ty = d;
 
     this.size = 30;
   }
+
+  void process() {
+    if (this.x < this.tx) this.x += random(3);
+    else if (this.x > this.tx) this.x -= random(3);
+    else this.x = this.tx;
+
+    if (this.y < this.ty) this.y += random(5);
+    else if (this.y > this.ty) this.y -= random(3);
+    else this.y = this.ty;
+
+    fill(0, 255, 0);
+    rect(this.x, this.y, this.size, this.size);
+  }
 }
 
+
+//Declaration of classes
+Shooter shooter = new Shooter(100, 100, 3);
+
+ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+
+ArrayList<Shoot> bullets = new ArrayList<Shoot>();
 
 
 void setup() {
@@ -135,14 +151,12 @@ void draw() {
     fill(0);
     rect(0, 0, 1200, 800 );
 
-    stroke(255);
-    for (int i = 0; i < x; i++) {
-      for (int j = 0; j < y; j++) {
-        rect(i * 100, j * 100, 100, 100);
+    stroke(100);
+    for (int i = 0; i < mapWidth; i++) {
+      for (int j = 0; j < mapHeight; j++) {
+        rect(i * 50, j * 50, 50, 50);
       }
     }
-
-
 
     // movement for shooter below
     shooter.render();
@@ -161,46 +175,69 @@ void draw() {
         shooter.moveDown();
       }
     }
+    
+    if (keyPressed) {
+      if (key == 'm'|| key == 'M') zombies.add(new Zombie(int(random(1200)), int(random(800)), shooter.x, shooter.y));
+    }
 
+
+    for (int i = 0; i < zombies.size(); i++) zombies.get(i).process(); // draw zombies
 
     for (int i = 0; i < bullets.size(); i++) bullets.get(i).process(); // draw the bullets
 
-    // remove bullets once they hit the edge of the screen
+
+
+    // remove bullets once they hit the edge of the screen or hit a zombie
     for (int i = 0; i < bullets.size(); i++) {
       if (bullets.get(i).x < 0 || bullets.get(i).x > 1500 ||bullets.get(i).y < 0 || bullets.get(i).y > 1000) {
         bullets.remove(i);
         i--;
+      }/*
+      for (int j = 0; j < zombies.size(); j++) {
+        if (bullets.get(i).x == zombies.get(j).x || bullets.get(i).y == zombies.get(j).y) {
+          bullets.remove(i);
+          zombies.remove(j);
+          i--;
+          j--;
+        }
       }
+      */
     }
   }
   if (stage == "MENU") Menu();
+  if (stage == "INSTRUCTIONS") Instructions();
 }
 
 
-/*
-void keyPressed(){
- 
- if (key == 'd' || key == 'D') {
- shooter.moveRight();
- } 
- if (key == 'a' || key == 'A') {
- shooter.moveLeft();
- } 
- if (key == 'w' || key == 'W') {
- shooter.moveUp();
- } 
- if (key == 's' || key == 'S') {
- shooter.moveDown();
- }
- }
- }
- void keyReleased(){
- 
- 
- }
- */
+
+
+
+void Menu() {
+
+  
+  fill(0);
+  rect(0, 0, 1200, 800);
+
+  fill(255);
+  rect(b1x, b1y, bw, bh);
+  
+  fill(0,255,0);
+
+  
+}
+
+void Instructions() {
+  fill(0);
+  rect(0, 0, 1200, 800);
+  
+  fill(255);
+  rect(b2x, b2y, bw, bh);
+  
+}
+
+
 
 void mousePressed() {
-  if (mouseX > 600 && mouseX < 700 && mouseY > 400 && mouseY < 440 && stage == "MENU") stage = "GAME";
+  if (mouseX > b1x && mouseX < b1x + bw && mouseY > b1y && mouseY < b1y + bh && stage == "MENU") stage = "INSTRUCTIONS";
+  if (mouseX > b2x && mouseX < b2x + bw && mouseY > b2y && mouseY < b2y + bh && stage == "INSTRUCTIONS") stage = "GAME";
 }
-
