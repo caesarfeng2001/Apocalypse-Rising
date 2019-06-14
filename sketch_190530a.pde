@@ -11,12 +11,16 @@ String characters[] = new String[4];
 int[][] map = new int[mapWidth][mapHeight];
 int Zombies[] = new int[10];
 
+Boolean death;
+
 int bw = 150;
 int bh = 50;
 int b1x = 525;
 int b1y = 650;
 int b2x = 525;
 int b2y = 600;
+int b3x = 525;
+int b3y = 625;
 
 
 
@@ -75,15 +79,12 @@ class Shooter {
 }
 
 
-
-
 class Shoot {
   float x, y, sx, sy;
 
   Shoot(float x, float y, float x2, float y2) {
     this.x = x;
     this.y = y;
-
 
     float deltax = x2 - x;
     float deltay = y2 - y;
@@ -107,8 +108,10 @@ class Shoot {
 
 class Zombie {
   int x, y, size;
+  boolean death;
 
   Zombie(int a, int b, int c, int d) {
+    this.death = false;
     this.x = a;
     this.y = b;
 
@@ -118,11 +121,12 @@ class Zombie {
   void process() {
     if (this.x < shooter.x) this.x += random(2);
     else if (this.x > shooter.x) this.x -= random(2);
-    else if (this.x == shooter.x || this.x + this.size == shooter.x) userHealth -= 1;
+   
+    if (this.x >= shooter.x && this.x <= shooter.x + this.size && this.y >= shooter.y && this.y <= shooter.y + this.size ) userHealth -= 1;
 
     if (this.y < shooter.y) this.y += random(2);
     else if (this.y > shooter.y) this.y -= random(2);
-    else if (this.y == shooter.y || this.y + this.size == shooter.y) userHealth -= 1;
+    //else if (this.y == shooter.y || this.y + this.size == shooter.y) userHealth -= 1;
 
     fill(0, 255, 0);
     rect(this.x, this.y, this.size, this.size);
@@ -149,7 +153,7 @@ void draw() {
     noStroke();
     fill(0);
     rect(0, 0, 1200, 800 );
-    
+
 
     stroke(100);
     for (int i = 0; i < mapWidth; i++) {
@@ -158,7 +162,7 @@ void draw() {
       }
     }
     textSize(30);
-    fill(204,0,0);
+    fill(204, 0, 0);
     text("Health: " + userHealth, 100, 50);
     text("Zombies Killed: " + killCount, 100, 100);
 
@@ -196,27 +200,31 @@ void draw() {
       if (bullets.get(i).x < 0 || bullets.get(i).x > 1500 ||bullets.get(i).y < 0 || bullets.get(i).y > 1000) {
         bullets.remove(i);
         i--;
-      }/*
-for (int j = 0; j < zombies.size(); j++) {
-       if (bullets.get(i).x == zombies.get(j).x || bullets.get(i).y == zombies.get(j).y) {
-       bullets.remove(i);
-       zombies.remove(j);
-       i--;
-       j--;
-       }
-       }
-       */
+      }
+    }
+    for (int i = 0; i < zombies.size(); i++) {
+      for (int j = 0; j < bullets.size(); j++) {
+        if (dist(bullets.get(j).x, bullets.get(j).y, zombies.get(i).x, zombies.get(i).y) < 30 ) {
+          bullets.remove(j);
+          zombies.get(i).death = true;
+          killCount += 1;
+          
+        }
+      }
     }
 
-    
-    if (userHealth <= 0) stage = "ENDSCREEN";
+    for (int j = 0; j < zombies.size(); j++) {
+      if (zombies.get(j).death == true) zombies.remove(j);
+    }
 
-   
+
+    if (userHealth <= 0) stage = "ENDSCREEN";
   }
   if (stage == "MENU") Menu();
   if (stage == "INSTRUCTIONS") Instructions();
   if (stage == "ENDSCREEN") endScreen();
 }
+
 
 
 
@@ -263,11 +271,13 @@ void Instructions() {
 void endScreen() {
   fill(0);
   rect(0, 0, 1200, 800);
-  
+
   textSize(100);
-  fill(204,0,0);
+  fill(204, 0, 0);
   text("GAME OVER", 300, 200);
   
+  textSize(30);
+  fill(255);
 }
 
 
