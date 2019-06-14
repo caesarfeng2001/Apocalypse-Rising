@@ -2,6 +2,8 @@ float S = 8;
 
 int mapWidth = 24;
 int mapHeight = 16;
+int userHealth = 1000;
+int killCount = 0;
 
 String stage = "MENU";
 String characters[] = new String[4];
@@ -106,18 +108,21 @@ class Shoot {
 class Zombie {
   int x, y, size;
 
-  Zombie(int a, int b) {
+  Zombie(int a, int b, int c, int d) {
     this.x = a;
     this.y = b;
+
     this.size = 30;
   }
 
   void process() {
     if (this.x < shooter.x) this.x += random(2);
     else if (this.x > shooter.x) this.x -= random(2);
+    else if (this.x == shooter.x || this.x + this.size == shooter.x) userHealth -= 1;
 
     if (this.y < shooter.y) this.y += random(2);
     else if (this.y > shooter.y) this.y -= random(2);
+    else if (this.y == shooter.y || this.y + this.size == shooter.y) userHealth -= 1;
 
     fill(0, 255, 0);
     rect(this.x, this.y, this.size, this.size);
@@ -126,7 +131,7 @@ class Zombie {
 
 
 //Declaration of classes
-Shooter shooter = new Shooter(100, 100, 3);
+Shooter shooter = new Shooter(100, 400, 3);
 
 ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 
@@ -144,6 +149,7 @@ void draw() {
     noStroke();
     fill(0);
     rect(0, 0, 1200, 800 );
+    
 
     stroke(100);
     for (int i = 0; i < mapWidth; i++) {
@@ -151,6 +157,10 @@ void draw() {
         rect(i * 50, j * 50, 50, 50);
       }
     }
+    textSize(30);
+    fill(204,0,0);
+    text("Health: " + userHealth, 100, 50);
+    text("Zombies Killed: " + killCount, 100, 100);
 
     // movement for shooter below
     shooter.render();
@@ -197,9 +207,15 @@ for (int j = 0; j < zombies.size(); j++) {
        }
        */
     }
+
+    
+    if (userHealth <= 0) stage = "ENDSCREEN";
+
+   
   }
   if (stage == "MENU") Menu();
   if (stage == "INSTRUCTIONS") Instructions();
+  if (stage == "ENDSCREEN") endScreen();
 }
 
 
@@ -207,8 +223,6 @@ for (int j = 0; j < zombies.size(); j++) {
 
 
 void Menu() {
-
-
   fill(0);
   rect(0, 0, 1200, 800);
 
@@ -246,6 +260,15 @@ void Instructions() {
   rect(b2x, b2y, bw, bh);
 }
 
+void endScreen() {
+  fill(0);
+  rect(0, 0, 1200, 800);
+  
+  textSize(100);
+  fill(204,0,0);
+  text("GAME OVER", 300, 200);
+  
+}
 
 
 void mousePressed() {
