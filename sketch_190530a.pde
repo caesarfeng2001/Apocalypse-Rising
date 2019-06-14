@@ -25,7 +25,7 @@ class Shooter {
     this.x = a;
     this.y = b;
 
-    this.sx = s;  
+    this.sx = s; 
     this.sy = s;
 
     this.size = 20;
@@ -69,7 +69,6 @@ class Shooter {
         bullets.add(new Shoot(this.x, this.y, mouseX, mouseY));
       }
     }
-    
   }
 }
 
@@ -96,7 +95,7 @@ class Shoot {
   void process() {
     this.x += this.sx;
     this.y += this.sy;
-    stroke(230, 44, 44);
+    stroke(255, 0, 0);
     line(this.x, this.y, this.x + this.sx, this.y + this.sy);
   }
 }
@@ -118,13 +117,11 @@ class Zombie {
   }
 
   void process() {
-    if (this.x < this.tx) this.x += random(3);
-    else if (this.x > this.tx) this.x -= random(3);
-    else this.x = this.tx;
+    if (this.x < shooter.x) this.x += random(2);
+    else if (this.x > shooter.x) this.x -= random(2);
 
-    if (this.y < this.ty) this.y += random(5);
-    else if (this.y > this.ty) this.y -= random(3);
-    else this.y = this.ty;
+    if (this.y < shooter.y) this.y += random(2);
+    else if (this.y > shooter.y) this.y -= random(2);
 
     fill(0, 255, 0);
     rect(this.x, this.y, this.size, this.size);
@@ -176,7 +173,7 @@ void draw() {
         shooter.moveDown();
       }
     }
-    
+
     if (keyPressed) {
       if (key == 'm'|| key == 'M') zombies.add(new Zombie(int(random(1200)), int(random(800)), shooter.x, shooter.y));
     }
@@ -194,15 +191,15 @@ void draw() {
         bullets.remove(i);
         i--;
       }/*
-      for (int j = 0; j < zombies.size(); j++) {
-        if (bullets.get(i).x == zombies.get(j).x || bullets.get(i).y == zombies.get(j).y) {
-          bullets.remove(i);
-          zombies.remove(j);
-          i--;
-          j--;
-        }
-      }
-      */
+for (int j = 0; j < zombies.size(); j++) {
+       if (bullets.get(i).x == zombies.get(j).x || bullets.get(i).y == zombies.get(j).y) {
+       bullets.remove(i);
+       zombies.remove(j);
+       i--;
+       j--;
+       }
+       }
+       */
     }
   }
   if (stage == "MENU") Menu();
@@ -215,34 +212,32 @@ void draw() {
 
 void Menu() {
 
-  
+
   fill(0);
   rect(0, 0, 1200, 800);
 
-  fill(0,255,0);
+  fill(0, 255, 0);
   rect(b1x, b1y, bw, bh);
-  
+
   fill(255);
   textSize(30);
-  text("CONTINUE", b1x , b1y - 30);
+  text("CONTINUE", b1x, b1y - 30);
   textSize(30);
   text("A Survival Game By Caesar Feng", 350, 200);
-  
+
   fill(204, 0, 0);
   textSize(100);
   text("APOCALYPSE RISING", 120, 100);
-
-  
 }
 
 void Instructions() {
   fill(0);
   rect(0, 0, 1200, 800);
-  
+
   fill(204, 0, 0);
   textSize(100);
   text("INSTRUCTIONS", 250, 100);
-  
+
   fill(255);
   textSize(30);
   text("Control character using W A S D keys, shoot zombies by mouseclicking.", 80, 200);
@@ -250,10 +245,9 @@ void Instructions() {
   text("Survive as long as possible...", 80, 300);
   textSize(40);
   text("BEGIN", b2x + 18, b2y - 30);
-  
-  fill(0,255,0);
+
+  fill(0, 255, 0);
   rect(b2x, b2y, bw, bh);
-  
 }
 
 
