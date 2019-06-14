@@ -104,15 +104,11 @@ class Shoot {
 
 
 class Zombie {
-  int x, y, tx, ty, size;
+  int x, y, size;
 
-  Zombie(int a, int b, int c, int d) {
+  Zombie(int a, int b) {
     this.x = a;
     this.y = b;
-
-    this.tx = c;
-    this.ty = d;
-
     this.size = 30;
   }
 
