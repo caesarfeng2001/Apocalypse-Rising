@@ -12,9 +12,10 @@ int Zombies[] = new int[10];
 int bw = 150;
 int bh = 50;
 int b1x = 525;
-int b1y = 375;
+int b1y = 650;
 int b2x = 525;
-int b2y = 650;
+int b2y = 600;
+
 
 
 class Shooter {
@@ -218,10 +219,18 @@ void Menu() {
   fill(0);
   rect(0, 0, 1200, 800);
 
-  fill(255);
+  fill(0,255,0);
   rect(b1x, b1y, bw, bh);
   
-  fill(0,255,0);
+  fill(255);
+  textSize(30);
+  text("CONTINUE", b1x , b1y - 30);
+  textSize(30);
+  text("A Survival Game By Caesar Feng", 350, 200);
+  
+  fill(204, 0, 0);
+  textSize(100);
+  text("APOCALYPSE RISING", 120, 100);
 
   
 }
@@ -230,7 +239,19 @@ void Instructions() {
   fill(0);
   rect(0, 0, 1200, 800);
   
+  fill(204, 0, 0);
+  textSize(100);
+  text("INSTRUCTIONS", 250, 100);
+  
   fill(255);
+  textSize(30);
+  text("Control character using W A S D keys, shoot zombies by mouseclicking.", 80, 200);
+  text("Press m to spawn zombies.", 80, 250);
+  text("Survive as long as possible...", 80, 300);
+  textSize(40);
+  text("BEGIN", b2x + 18, b2y - 30);
+  
+  fill(0,255,0);
   rect(b2x, b2y, bw, bh);
   
 }
