@@ -110,7 +110,7 @@ class Zombie {
   int x, y, size;
   boolean death;
 
-  Zombie(int a, int b, int c, int d) {
+  Zombie(int a, int b ) {
     this.death = false;
     this.x = a;
     this.y = b;
@@ -124,8 +124,8 @@ class Zombie {
    
     if (this.x >= shooter.x && this.x <= shooter.x + this.size && this.y >= shooter.y && this.y <= shooter.y + this.size ) userHealth -= 1;
 
-    if (this.y < shooter.y) this.y += random(2);
-    else if (this.y > shooter.y) this.y -= random(2);
+    if (this.y < shooter.y) this.y += random(3);
+    else if (this.y > shooter.y) this.y -= random(3);
     //else if (this.y == shooter.y || this.y + this.size == shooter.y) userHealth -= 1;
 
     fill(0, 255, 0);
@@ -133,11 +133,35 @@ class Zombie {
   }
 }
 
+class bossZombie extends Zombie {
+  
+  bossZombie(int a, int b){
+    super(a,b);
+  }
+  void render() {
+    if (this.x < shooter.x) this.x += random(5);
+    else if (this.x > shooter.x) this.x -= random(5);
+   
+    if (this.x >= shooter.x && this.x <= shooter.x + this.size && this.y >= shooter.y && this.y <= shooter.y + this.size ) userHealth -= 5;
 
-//Declaration of classes
+    if (this.y < shooter.y) this.y += random(5);
+    else if (this.y > shooter.y) this.y -= random(5);
+    
+    fill(0,200,0);
+    rect(this.x, this.y, 50, 50);
+    
+  }
+    
+    
+ 
+}
+
+
+
 Shooter shooter = new Shooter(100, 400, 3);
 
 ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+ArrayList<bossZombie> boss = new ArrayList<bossZombie>();
 
 ArrayList<Shoot> bullets = new ArrayList<Shoot>();
 
@@ -184,12 +208,17 @@ void draw() {
       }
     }
 
+/*
     if (keyPressed) {
-      if (key == 'm'|| key == 'M') zombies.add(new Zombie(int(random(1200)), int(random(800)), shooter.x, shooter.y));
+      if (key == 'm'|| key == 'M') zombies.add(new Zombie(int(random(1200)), int(random(800))));
+      if (key == 'n'|| key == 'N') boss.add(new bossZombie(int(random(1200)), int(random(800))));
     }
-
+*/
+    round(5,1);
 
     for (int i = 0; i < zombies.size(); i++) zombies.get(i).process(); // draw zombies
+    
+    for (int i = 0; i < boss.size(); i++) boss.get(i).render();
 
     for (int i = 0; i < bullets.size(); i++) bullets.get(i).process(); // draw the bullets
 
@@ -212,9 +241,23 @@ void draw() {
         }
       }
     }
+    for (int i = 0; i < boss.size(); i++) {
+      for (int j = 0; j < bullets.size(); j++) {
+        if (dist(bullets.get(j).x, bullets.get(j).y, boss.get(i).x, boss.get(i).y) < 50 ) {
+          bullets.remove(j);
+          boss.get(i).death = true;
+          killCount += 1;
+          
+        }
+      }
+    }
 
     for (int j = 0; j < zombies.size(); j++) {
       if (zombies.get(j).death == true) zombies.remove(j);
+    }
+    
+    for (int j = 0; j < boss.size(); j++) {
+      if (boss.get(j).death == true) boss.remove(j);
     }
 
 
@@ -225,9 +268,15 @@ void draw() {
   if (stage == "ENDSCREEN") endScreen();
 }
 
-
-
-
+//recursion here ali, the function is called on line 217
+void round(int n, int a){
+  if(n>0){
+    for(int i = 0; i < n; i++){
+      zombies.add(new Zombie(int(random(1200)), int(random(800))));
+      round(n-1, a + 1);
+    }
+  }
+}
 
 
 void Menu() {
