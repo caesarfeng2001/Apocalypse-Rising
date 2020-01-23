@@ -1,4 +1,4 @@
-Apocalypse Rising: An Action-packed Survival Game
+Apocalypse Rising: An Action-packed Survival Game 🧟🔫
 
 Made with Java using the Processing IDE. 
 
